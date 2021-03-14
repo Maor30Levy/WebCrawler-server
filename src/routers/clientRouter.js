@@ -16,6 +16,8 @@ router.post('/newQuery', async (req, res) => {
         request.qName = queueName;
         request.id = '0';
         request.level = '1';
+        request.nodesInLevel = '1';
+        request.currentNodeInLevel = '1';
         const { messageID, queueURL } = await createQueueAndMessage(queueName, request);
         const workerHost = await getSecret('workerHost');
         await axios.post(workerHost, { queueURL });

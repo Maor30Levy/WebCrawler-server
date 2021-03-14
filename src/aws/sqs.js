@@ -44,6 +44,14 @@ const AWSCreateMessage = async (request, queueURL) => {
       "maxPages": {
         DataType: "Number",
         StringValue: request.maxPages
+      },
+      "nodesInLevel": {
+        DataType: "Number",
+        StringValue: request.nodesInLevel
+      },
+      "currentNodeInLevel": {
+        DataType: "Number",
+        StringValue: request.currentNodeInLevel
       }
     },
     MessageBody: `${request.url}: ${request.id}`,
