@@ -4,13 +4,11 @@ const router = new express.Router();
 const { createQueueAndMessage } = require('../aws/sqs');
 const generateQueueName = require('../../utils/generateQueueName');
 const { getTreeFromDB } = require('../../utils/functions');
-const { getSecret } = require('../aws/ssm');
-
+const keys = require('../keys/keys');
 router.post('/newQuery', async (req, res) => {
     try {
         const request = req.body;
         const queueName = generateQueueName(request.url, request.maxLevel, request.maxPages);
-
         const treeFromDB = await getTreeFromDB(queueName);
         if (treeFromDB) return res.send(treeFromDB);
         request.qName = queueName;
@@ -19,7 +17,7 @@ router.post('/newQuery', async (req, res) => {
         request.nodesInLevel = '1';
         request.currentNodeInLevel = '1';
         const { messageID, queueURL } = await createQueueAndMessage(queueName, request);
-        const workerHost = await getSecret('workerHost');
+        const workerHost = keys.workerHost;
         await axios.post(workerHost, { queueURL });
         return res.send({ messageID, queueURL, queueName });
 

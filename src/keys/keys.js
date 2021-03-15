@@ -1,17 +1,17 @@
-const {getSecret} = require('../aws/ssm');
-
-const getKeys = async ()=>{
-    try{
-        const keys = {
-            port: await getSecret('serverPort'),
-            clientHost: await getSecret('clientHost'),
-            mongoDB: await getSecret('mongoDB'),
-            workerHost: await getSecret('workerHost')
-        };
-        return keys
-    }catch(err){
+const { getSecret } = require('../aws/ssm');
+const keys = {};
+const getKeys = async () => {
+    try {
+        keys.port = await getSecret('serverPort');
+        keys.clientHost = await getSecret('clientHost');
+        keys.mongoDB = await getSecret('mongoDB');
+        keys.workerHost = await getSecret('workerHost');
+    } catch (err) {
         console.log(err)
     }
 };
 
-module.exports = {getKeys};
+getKeys();
+
+
+module.exports = keys;
