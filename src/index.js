@@ -1,5 +1,3 @@
-const path = require('path');
-const http = require('http');
 const express = require('express');
 const cors = require('cors');
 let keys;
@@ -12,15 +10,12 @@ const initServer = async () => {
         const { connectMongo } = require('./db/mongoose');
         connectMongo(keys.mongoDB);
         const app = express();
-        const server = http.createServer(app);
         app.use(express.json());
         app.use(cors());
         const port = keys.port;
-        const publicDirectoryPath = path.join(__dirname, '../public');
         const clientRouter = require('./routers/clientRouter');
-        app.use(express.static(publicDirectoryPath));
         app.use(clientRouter);
-        server.listen(port, () => {
+        app.listen(port, () => {
             console.log(`Server is up on port ${port}!`)
         });
     } catch (err) {

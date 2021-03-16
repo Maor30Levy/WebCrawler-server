@@ -1,6 +1,5 @@
 const { sqs } = require('./aws-connect');
 
-
 const AWSCreateQ = async (queueName) => {
   const createParams = {
     QueueName: `${queueName}.fifo`,
@@ -61,27 +60,15 @@ const AWSCreateMessage = async (request, queueURL) => {
   };
   try {
     const data = await sqs.sendMessage(params).promise();
-    console.log("Message created successfully.", data.MessageId);
+    console.log(`Message ${request.id} added to queue`);
     return data.MessageId;
   } catch (err) {
     console.log(`Error creating the message: ${err}`);
   }
 };
 
-const createQueueAndMessage = async (queueName, request) => {
-  try {
-    const queueURL = await AWSCreateQ(queueName);
-    if (queueURL) {
-      const messageID = await AWSCreateMessage(request, queueURL);
-      return { messageID, queueURL };
-    }
-
-  } catch (err) {
-    console.log(err);
-  }
-};
-
 
 module.exports = {
-  createQueueAndMessage
+  AWSCreateQ,
+  AWSCreateMessage
 };

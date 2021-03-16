@@ -1,43 +1,24 @@
 const express = require('express');
-const axios = require('axios');
 const router = new express.Router();
-const { createQueueAndMessage } = require('../aws/sqs');
-const generateQueueName = require('../../utils/generateQueueName');
-const { getTreeFromDB } = require('../../utils/functions');
-const keys = require('../keys/keys');
-router.post('/newQuery', async (req, res) => {
+const checkForExistingTrees = require('../middleware/existingTrees');
+const initiateQuery = require('../controller/qeuryInit');
+
+router.post('/newQuery', checkForExistingTrees, async (req, res) => {
     try {
-        const request = req.body;
-        const queueName = generateQueueName(request.url, request.maxLevel, request.maxPages);
-        const treeFromDB = await getTreeFromDB(queueName);
-        if (treeFromDB) return res.send(treeFromDB);
-        request.qName = queueName;
-        request.id = '0';
-        request.level = '1';
-        request.nodesInLevel = '1';
-        request.currentNodeInLevel = '1';
-        const { messageID, queueURL } = await createQueueAndMessage(queueName, request);
-        const workerHost = keys.workerHost;
-        await axios.post(workerHost, { queueURL });
-        return res.send({ messageID, queueURL, queueName });
-
+        const queryDetails = await initiateQuery(req.request);
+        return res.send(queryDetails);
     } catch (err) {
-        console.log(err.message);
+        console.log(err);
         res.status(500);
-
     }
 });
 
-router.post('/stream', async (req, res) => {
+router.post('/stream', checkForExistingTrees, async (req, res) => {
     try {
-        const request = req.body;
-        const queueName = generateQueueName(request.url, request.maxLevel, request.maxPages);
-        const tree = await getTreeFromDB(queueName);
-        if (tree) return res.send(tree);
         return res.status(404).send('Query not found.');
-
     } catch (err) {
         console.log(err);
+        res.status(500);
     }
 
 })

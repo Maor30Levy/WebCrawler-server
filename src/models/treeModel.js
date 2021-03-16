@@ -23,9 +23,17 @@ const treeSchema = new mongoose.Schema({
     maxPages: {
         type: Number,
         required: true
+    },
+    completed: {
+        type: Boolean
+    },
+    currentLevel: {
+        type: Number
+    },
+    nodesInLevel: {
+        type: Number
     }
 });
-
 
 const Tree = mongoose.model('Tree', treeSchema);
 
