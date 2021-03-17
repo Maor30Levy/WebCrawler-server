@@ -1,27 +1,11 @@
 const express = require('express');
 const router = new express.Router();
 const checkForExistingTrees = require('../middleware/existingTrees');
-const initiateQuery = require('../controller/qeuryInit');
+const { newQuery, stream } = require('../controllers/client-controllers');
 
-router.post('/newQuery', checkForExistingTrees, async (req, res) => {
-    try {
-        const queryDetails = await initiateQuery(req.request);
-        return res.send(queryDetails);
-    } catch (err) {
-        console.log(err);
-        res.status(500);
-    }
-});
+router.post('/newQuery', checkForExistingTrees, newQuery);
 
-router.post('/stream', checkForExistingTrees, async (req, res) => {
-    try {
-        return res.status(404).send('Query not found.');
-    } catch (err) {
-        console.log(err);
-        res.status(500);
-    }
-
-})
+router.post('/stream', checkForExistingTrees, stream);
 
 
 module.exports = router;

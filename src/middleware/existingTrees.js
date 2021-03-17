@@ -1,5 +1,5 @@
-const generateQueueName = require('../../utils/generateQueueName');
-const { getTreeFromDB } = require('../../utils/functions');
+const generateQueueName = require('../services/queue-name-generator');
+const { getTreeFromDB } = require('../services/tree-services');
 
 
 const checkForExistingTrees = async (req, res, next) => {

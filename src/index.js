@@ -7,8 +7,10 @@ const initServer = async () => {
             await require('./keys/setKeys').setKeys();
         }
         keys = require('./keys/keys');
-        const { connectMongo } = require('./db/mongoose');
-        connectMongo(keys.mongoDB);
+        const redisClient = require('./redis/redis-connect');
+        redisClient.on("ready", function () {
+            console.log('Redis client connected');
+        });
         const app = express();
         app.use(express.json());
         app.use(cors());

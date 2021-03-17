@@ -2,10 +2,9 @@ const { getSecret } = require('../aws/ssm');
 const keys = {};
 const getKeys = async () => {
     try {
+        keys.workerHost = await getSecret('workerHost');
         keys.port = await getSecret('serverPort');
         keys.clientHost = await getSecret('clientHost');
-        keys.mongoDB = await getSecret('mongoDB');
-        keys.workerHost = await getSecret('workerHost');
     } catch (err) {
         console.log(err)
     }
