@@ -1,10 +1,10 @@
-const { AWSCreateQ, AWSCreateMessage } = require('../aws/sqs');
+const { createQueue, createMessage } = require('./queue-and-message-services');
 
 const createQueueAndMessage = async (queueName, request) => {
     try {
-        const queueURL = await AWSCreateQ(queueName);
+        const queueURL = await createQueue(queueName);
         if (queueURL) {
-            const messageID = await AWSCreateMessage(request, queueURL);
+            const messageID = await createMessage(request, queueURL)
             return { messageID, queueURL };
         }
 

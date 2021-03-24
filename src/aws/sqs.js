@@ -17,6 +17,16 @@ const AWSCreateQ = async (queueName) => {
   }
 };
 
+const AWSGetQueueURL = async (queueName) => {
+  const params = { QueueName: `${queueName}.fifo` };
+  try {
+    const data = await sqs.getQueueUrl(params).promise();
+    return data.QueueUrl;
+  } catch (err) {
+    console.log(`Error fetching the queue: ${err}`);
+  }
+};
+
 const AWSCreateMessage = async (request, queueURL) => {
   const params = {
     MessageAttributes: {
@@ -43,14 +53,6 @@ const AWSCreateMessage = async (request, queueURL) => {
       "maxPages": {
         DataType: "Number",
         StringValue: request.maxPages
-      },
-      "nodesInLevel": {
-        DataType: "Number",
-        StringValue: request.nodesInLevel
-      },
-      "currentNodeInLevel": {
-        DataType: "Number",
-        StringValue: request.currentNodeInLevel
       }
     },
     MessageBody: `${request.url}: ${request.id}`,
@@ -67,8 +69,22 @@ const AWSCreateMessage = async (request, queueURL) => {
   }
 };
 
+const AWSDeleteQ = async (queueURL) => {
+  const deleteParams = {
+    QueueUrl: queueURL
+  };
+  try {
+    await sqs.deleteQueue(deleteParams).promise();
+    console.log("Queue deleted");
+  } catch (err) {
+    console.log("Error deleting the queue", err);
+  }
+};
+
 
 module.exports = {
   AWSCreateQ,
-  AWSCreateMessage
+  AWSGetQueueURL,
+  AWSCreateMessage,
+  AWSDeleteQ
 };

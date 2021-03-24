@@ -7,7 +7,10 @@ const checkForExistingTrees = async (req, res, next) => {
         const request = req.body;
         const queueName = generateQueueName(request.url, request.maxLevel, request.maxPages);
         const treeFromDB = await getTreeFromDB(queueName);
-        if (treeFromDB) return res.send(treeFromDB);
+        if (treeFromDB) {
+            if (treeFromDB.completed) return res.send(treeFromDB);
+            req.tree = treeFromDB;
+        }
         request.qName = queueName;
         req.request = request;
         next();
