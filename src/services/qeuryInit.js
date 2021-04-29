@@ -1,6 +1,6 @@
 const axios = require('axios');
 const { createQueueAndMessage } = require('./queryHandler');
-const keys = require('../keys/keys');
+const { keys } = require('../keys/keys');
 
 const initiateQuery = async (request) => {
     try {
