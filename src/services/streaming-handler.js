@@ -1,5 +1,5 @@
 const axios = require('axios');
-const keys = require('../keys/keys');
+const { keys } = require('../keys/keys');
 const { deleteQueue, createMessage } = require('./queue-and-message-services');
 const {
     detectGapsInTree, getLevelGaps,
