@@ -1,10 +1,11 @@
 const express = require('express');
 const cors = require('cors');
 const { keys } = require('./keys/keys');
-const redisClient = require('./redis/redis-connect');
-redisClient.on("ready", function () {
-    console.log('Redis client connected');
-});
+// const redisClient = require('./redis/redis-connect');
+// redisClient.on("ready", function () {
+//     console.log('Redis client connected');
+// });
+require('./aws/aws-connect')
 const app = express();
 app.use(express.json());
 app.use(cors());
