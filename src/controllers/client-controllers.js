@@ -8,7 +8,7 @@ const newQuery = async (req, res) => {
         return res.send(queryDetails);
     } catch (err) {
         console.log(err);
-        res.status(500);
+        return res.status(500);
     }
 };
 const stream = async (req, res) => {
@@ -22,7 +22,7 @@ const stream = async (req, res) => {
         return res.status(404).send('Query not found.');
     } catch (err) {
         console.log(err);
-        res.status(500);
+        return res.status(500);
     }
 
 };

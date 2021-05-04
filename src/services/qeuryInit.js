@@ -10,8 +10,8 @@ const initiateQuery = async (request) => {
         request.currentNodeInLevel = '1';
         const queueName = request.qName;
         const { messageID, queueURL } = await createQueueAndMessage(queueName, request);
-        const workerHost = keys.workerHost;
-        await axios.post(workerHost, { queueURL });
+        const workerURL = `http://${keys.workerHost}:${keys.workerPort}`;
+        await axios.post(workerURL, { queueURL });
         return { messageID, queueURL, queueName }
     } catch (err) {
         console.log(err.message);
