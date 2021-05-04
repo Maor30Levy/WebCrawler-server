@@ -11,6 +11,7 @@ const initiateQuery = async (request) => {
         const queueName = request.qName;
         const { messageID, queueURL } = await createQueueAndMessage(queueName, request);
         const workerURL = `http://${keys.workerHost}:${keys.workerPort}`;
+        console.log(workerURL);
         await axios.post(workerURL, { queueURL });
         return { messageID, queueURL, queueName }
     } catch (err) {
